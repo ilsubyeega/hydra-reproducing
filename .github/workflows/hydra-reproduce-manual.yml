@@ -1,0 +1,19 @@
+name: hydra-reproduce-manual
+
+on:
+    workflow_call:
+        inputs:
+            hydra_build_number:
+                description: "The build number of the hydra job. https://hydra.nixos.org/build/[number]"
+                required: true
+                type: string
+                
+jobs:
+    reproduce:
+        name: Reproduce Hydra
+        runs-on: ubuntu-latest
+        steps:
+            - uses: nixbuild/nix-quick-install-action@v29
+            - run: nix build --version
+            - name: Reproduce
+              run: "curl https://hydra.nixos.org/build/${{ inputs.hydra_build_number }}/reproduce | bash"
